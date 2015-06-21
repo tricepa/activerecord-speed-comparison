@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client_id: 
+  vendor_id: 
+  summary: MyString
+
+two:
+  client_id: 
+  vendor_id: 
+  summary: MyString
