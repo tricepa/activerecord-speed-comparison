@@ -1,3 +1,3 @@
 class Vendor < ActiveRecord::Base
-  has_many :promotions, dependent: :destroy
+  has_many :orders
 end

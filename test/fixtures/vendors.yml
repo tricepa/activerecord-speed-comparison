@@ -2,6 +2,8 @@
 
 one:
   name: MyString
+  promotion: false
 
 two:
   name: MyString
+  promotion: false

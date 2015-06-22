@@ -3,9 +3,9 @@
 one:
   client_id: 
   vendor_id: 
-  summary: MyString
+  summary: MyText
 
 two:
   client_id: 
   vendor_id: 
-  summary: MyString
+  summary: MyText
