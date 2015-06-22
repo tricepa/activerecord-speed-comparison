@@ -38,8 +38,8 @@ task :run_comparisons => :environment do
   # demonstrate comparisons with larger dataset
 end
 
-# orders parameter specifies number of orders to insert into database
-def seed_database(orders)
+# parameter specifies number of orders to insert into database
+def seed_database(order_count)
   # clear tables
   clear_tables([Order, Client, Vendor])
 
@@ -50,13 +50,21 @@ def seed_database(orders)
 
   ])
 
+  client_count = Client.count
+
   Vendor.create!([
     {id: 1, name: "ABC Home", promotion: false},
     {id: 2, name: "Schoolhouse Electric", promotion: true}
   ])
 
-  Client.find(1).orders.create!(id: 1, summary: "Schoolhouse Order by Joe K", vendor: Vendor.find(2))
-  Client.find(2).orders.create!(id: 2, summary: "ABC Order by Estevan B", vendor: Vendor.find(1))
+  vendor_count = Vendor.count
+
+  prng = Random.new
+  order_count.times do |n|
+    client = Client.find(prng.rand(1..client_count))
+    vendor = Vendor.find(prng.rand(1..vendor_count))
+    client.orders.create!(id: "#{n+1}", summary: "#{vendor.name} order by #{client.name}", vendor: vendor)
+  end
 end
 
 # clear tables specified in input array
