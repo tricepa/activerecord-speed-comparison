@@ -4,27 +4,33 @@ require 'benchmark'
 task :run_comparisons => :environment do
   desc "Compare relative runtimes of record retrieval using includes, joins, and enumeration"
 
-  seed_database
+  seed_database(2)
 
   # demonstrate comparison with retrieval of client and vendor names of orders whose vendors have ongoing promotions
-  orders = Order.joins(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
-  orders.each do |order|
-    puts "Using joins"
-    puts "Notify #{order.client.name} at #{order.client.email} that #{order.vendor.name} is having a promotion!"
-  end
-
-  orders = Order.includes(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
-  orders.each do |order|
-    puts "Using includes"
-    puts "Notify #{order.client.name} at #{order.client.email} that #{order.vendor.name} is having a promotion!"
-  end
-
-  orders = Order.all
-  orders.each do |order|
-    if order.vendor.promotion==true &&  order.client.active==true
-      puts "Using enumeration"
-      puts "Notify #{order.client.name} at #{order.client.email} that #{order.vendor.name} is having a promotion!"
+  Benchmark.bm(7) do |bm|
+    bm.report('joins') do
+      orders = Order.joins(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
+      orders.each do |order|
+        puts "Notify #{order.client.name} at #{order.client.email} that #{order.vendor.name} is having a promotion!"
+      end
     end
+
+    bm.report('includes') do
+      orders = Order.includes(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
+      orders.each do |order|
+        puts "Notify #{order.client.name} at #{order.client.email} that #{order.vendor.name} is having a promotion!"
+      end
+    end
+
+    bm.report('enumeration') do
+      orders = Order.all
+      orders.each do |order|
+        if order.vendor.promotion==true &&  order.client.active==true
+          puts "Notify #{order.client.name} at #{order.client.email} that #{order.vendor.name} is having a promotion!"
+        end
+      end
+    end
+
   end
 
   # demonstrate comparison with retrieval of only order info. Should demonstrate less discrepancy
@@ -32,7 +38,8 @@ task :run_comparisons => :environment do
   # demonstrate comparisons with larger dataset
 end
 
-def seed_database
+# orders parameter specifies number of orders to insert into database
+def seed_database(orders)
   # clear tables
   clear_tables([Order, Client, Vendor])
 
@@ -52,6 +59,7 @@ def seed_database
   Client.find(2).orders.create!(id: 2, summary: "ABC Order by Estevan B", vendor: Vendor.find(1))
 end
 
+# clear tables specified in input array
 def clear_tables(tables)
   tables.each do |t|
     t.delete_all
