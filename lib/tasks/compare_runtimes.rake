@@ -7,41 +7,43 @@ task :compare_runtimes => [:environment, :"db:reset"] do
   desc "Compare relative runtimes of Ative Record record retrieval using .includes, .joins, and enumeration with different dataset sizes"
 
   create_orders(5)
-  puts "Retrieving order summmary of orders whose vendor has an ongoing promotion..."
-  run_comparisons(false, true) # retrieve order summary of orders whose vendor has an ongoing promotion
-  puts "Retrieving client name of orders whose vendor has an ongoing promotion..."
-  run_comparisons(true, false) # retrieve client name of orders whose vendor has an ongoing promotion
+  puts "Retrieving orders whose vendor has an ongoing promotion..."
+  run_comparisons(["order"])
+  puts "Retrieving clients of orders whose vendor has an ongoing promotion..."
+  run_comparisons(["client"])
 
   # Running comparisons with a larger order dataset demonstrates a dramatic increase in the runtime of enumeration method
   create_orders(500)
-  puts "Retrieving order summmary of orders whose vendor has an ongoing promotion..."
-  run_comparisons(false, true) # retrieve order summary of orders whose vendor has an ongoing promotion
-  puts "Retrieving client name of orders whose vendor has an ongoing promotion..."
-  run_comparisons(true, false) # retrieve client name of orders whose vendor has an ongoing promotion
+  puts "Retrieving orders whose vendor has an ongoing promotion..."
+  run_comparisons(["order"])
+  puts "Retrieving clients of orders whose vendor has an ongoing promotion..."
+  run_comparisons(["client"])
 end
 
-# Boolean parameters indicate the attributes to retrieve of orders whose vendor has an ongoing promotion.
-# The parameters are chosen to demonstrate performance differences with .includes, .joins, and enumeration
-# when retrieving different data.
-# Since the initial query is performed on the Order table, client info retrieval requires accessing a different
-# table, whereas order info retrieval does not. The former retrieval demonstrates where '.includes' provides
-# an advantage over '.joins.'
-def run_comparisons(get_client_info, get_order_info)
+# "Request" parameter is an array that specifies which tables to retrieve of orders whose vendor has an ongoing promotion.
+# Currently, the parameter can have value 'order,' 'client,' or 'vendor.' Having this parameter allows demonstration
+# of how '.includes,' '.joins, and enumeration perform under different retrieval scenarios.
+# For example, since the initial query is performed on the Order table, client info retrieval requires accessing a different
+# table, whereas order info retrieval does not. The former retrieval demonstrates where '.includes' provides an
+# advantage over '.joins.'
+def run_comparisons(request)
   # Use Benchmark to retrieve real time elapsed of record retrieval.
   # Benchmark module reference: http://ruby-doc.org/stdlib-2.0.0/libdoc/benchmark/rdoc/Benchmark.html
+  joins_results = Set.new
+  includes_results = Set.new
+  enumeration_results = Set.new
+
   joins_runtime = Benchmark.realtime do
     orders = Order.joins(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
     orders.each do |order|
-      get_client_info && order.client.name # perform query to retrieve client name if get_client_info is true
-      get_order_info && order.summary # perform query to retrieve order summary if get_order_info is true
+      joins_results.add(get_info(order, request))
     end
   end
 
   includes_runtime = Benchmark.realtime do
     orders = Order.includes(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
     orders.each do |order|
-      get_client_info && order.client.name # perform query to retrieve client name if get_client_info is true
-      get_order_info && order.summary # perform query to retrieve order summary if get_order_info is true
+      includes_results.add(get_info(order, request))
     end
   end
 
@@ -49,15 +51,40 @@ def run_comparisons(get_client_info, get_order_info)
     orders = Order.all
     orders.each do |order|
       if order.vendor.promotion==true &&  order.client.active==true
-        get_client_info && order.client.name # perform query to retrieve client name if get_client_info is true
-        get_order_info && order.summary # perform query to retrieve order summary if get_order_info is true
+        enumeration_results.add(get_info(order, request))
       end
     end
+  end
+
+  joins_results_count = joins_results.count
+  includes_results_count = includes_results.count
+  enumeration_results_count = enumeration_results.count
+
+  if joins_results_count == includes_results_count && includes_results_count == enumeration_results_count
+    puts "#{joins_results_count} unique #{request}(s) retrieved."
+  else
+    puts "#{joins_results_count} unique #{request} were retrieved from using .joins, #{includes_results_count} unique #{request} were retrieved from using .includes, and #{enumeration_results_count} unique #{request} were retrieved from using enumeration."
   end
   puts "That took #{joins_runtime} seconds with .joins, #{includes_runtime} seconds with .includes, and #{enumeration_runtime} seconds with enumeration.\n\n"
 end
 
-# parameter specifies number of orders to insert into database
+# Retrieve and output information on requested tables
+def get_info(order, request)
+  request.each do |table|
+    case table
+    when "order"
+      return order.id
+    when "client"
+      return order.client.id
+    when "vendor"
+      return order.vendor.id
+    else
+      puts "error"# raise error
+    end
+  end
+end
+
+# Parameter specifies number of orders to insert into database
 def create_orders(order_count)
   Order.delete_all
 
