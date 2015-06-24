@@ -27,13 +27,12 @@ end
 # table, whereas order info retrieval does not. The former retrieval demonstrates where '.includes' provides an
 # advantage over '.joins.'
 def run_comparisons(request)
-  # Use Benchmark to retrieve real time elapsed of record retrieval.
-  # Benchmark module reference: http://ruby-doc.org/stdlib-2.0.0/libdoc/benchmark/rdoc/Benchmark.html
-
   joins_results = Set.new # Unique records from using the .joins method
   includes_results = Set.new # Unique records from using the .includes method
   enumeration_results = Set.new # Unique records from using the enumeration method
 
+  # Use Benchmark to retrieve real time elapsed of record retrieval.
+  # Benchmark module reference: http://ruby-doc.org/stdlib-2.0.0/libdoc/benchmark/rdoc/Benchmark.html
   joins_runtime = Benchmark.realtime do
     joins_results = retrieve_with_joins(request, joins_results)
   end
@@ -44,7 +43,6 @@ def run_comparisons(request)
 
   enumeration_runtime = Benchmark.realtime do
     enumeration_results = retrieve_with_enumeration(request, enumeration_results)
-    #puts enumeration_results.count
   end
 
   joins_results_count = joins_results.count
@@ -52,13 +50,13 @@ def run_comparisons(request)
   enumeration_results_count = enumeration_results.count
 
   # Print the number of records retrieved and the time elapsed using all three methods.
-  # Verifies that all three methods performed the same record retrievals.
+  # Confirm that all three methods performed the same record retrievals.
   puts "#{joins_results_count} unique #{request}(s) were retrieved using .joins, #{includes_results_count} unique #{request} were retrieved using .includes, and #{enumeration_results_count} unique #{request} were retrieved using enumeration."
   puts "That took #{joins_runtime} seconds with .joins, #{includes_runtime} seconds with .includes, and #{enumeration_runtime} seconds with enumeration.\n\n"
 end
 
-# Uses ".joins" to find all orders whose vendor has an ongoing promotion
-# Returns an array of unique records associated to the orders, specified by the "request" parameter
+# Use ".joins" to find all orders whose vendor has an ongoing promotion
+# Return an array of unique records associated to the orders, specified by the "request" parameter
 def retrieve_with_joins(request, results)
   orders = Order.joins(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
   orders.each do |order|
@@ -67,8 +65,8 @@ def retrieve_with_joins(request, results)
   return results
 end
 
-# Uses ".includes" to find all orders whose vendor has an ongoing promotion
-# Returns an array of unique records associated to the orders, specified by the "request" parameter
+# Use ".includes" to find all orders whose vendor has an ongoing promotion
+# Return an array of unique records associated to the orders, specified by the "request" parameter
 def retrieve_with_includes(request, results)
   orders = Order.includes(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
   orders.each do |order|
@@ -78,8 +76,8 @@ def retrieve_with_includes(request, results)
   return results
 end
 
-# Uses the enumeration method to find all orders whose vendor has an ongoing promotion
-# Returns an array of unique records associated to the orders, specified by the "request" parameter
+# Use the enumeration method to find all orders whose vendor has an ongoing promotion
+# Return an array of unique records associated to the orders, specified by the "request" parameter
 def retrieve_with_enumeration(request, results)
   orders = Order.all
   orders.each do |order|
@@ -92,6 +90,7 @@ def retrieve_with_enumeration(request, results)
 end
 
 # Retrieve and return ID of requested table associated with the given order parameter
+# Acceptable inputs can easily be added in the future
 def get_record(order, request)
   case request
   when "order"
@@ -101,7 +100,7 @@ def get_record(order, request)
   when "vendor"
     return order.vendor.id
   else
-    raise ArgumentError, "'request' parameter must be 'order,' 'client,' or 'vendor'" # Acceptable inputs can easily be added in the future
+    raise ArgumentError, "'request' parameter must be 'order,' 'client,' or 'vendor'"
   end
 end
 

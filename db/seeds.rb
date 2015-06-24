@@ -1,6 +1,6 @@
 # Seed database with Client and Vendor entries
 
-# Create 100 clients with random active state
+# Create 100 clients with random names and active state
 100.times do |n|
   Client.create!([
     {id: "#{n+1}", name: Faker::Name.name, email: "aspiring_home-lover#{n+1}@example.com", active: [true, false].sample}

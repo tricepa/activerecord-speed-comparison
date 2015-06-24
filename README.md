@@ -25,9 +25,19 @@ When retrieving the clients of those orders, however, ".includes" wins out by fa
 
 ## Usage & Data
 
-run "bundle install" to install gem dependencies
+Clone repo:
+git clone https://github.com/tricepa/activerecord-speed-comparison.git
+cd activerecord-speed-comparison
+
+Install gem dependencies:
+bundle install
+
+Run rake task:
+rake compare_runtimes
 
 The rake task "compare_runtimes.rake" takes care of creating the database, loading the appropriate tables from "schema.rb," and seeding the database with the Client and Vendor data in "seeds.rb." Orders are inserted dynamically in the rake task itself to demonstrate comparisons with differently sized datasets.
 
 ## TODO
 Given the time constraint, I did not include a test suite for this application. 
+
+Thanks for reading!
