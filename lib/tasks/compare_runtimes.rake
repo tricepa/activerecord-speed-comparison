@@ -8,19 +8,19 @@ task :compare_runtimes => [:environment, :"db:reset"] do
 
   create_orders(5)
   puts "Retrieving orders whose vendor has an ongoing promotion..."
-  run_comparisons(["order"])
+  run_comparisons("order")
   puts "Retrieving clients of orders whose vendor has an ongoing promotion..."
-  run_comparisons(["client"])
+  run_comparisons("client")
 
   # Running comparisons with a larger order dataset demonstrates a dramatic increase in the runtime of enumeration method
   create_orders(500)
   puts "Retrieving orders whose vendor has an ongoing promotion..."
-  run_comparisons(["order"])
+  run_comparisons("order")
   puts "Retrieving clients of orders whose vendor has an ongoing promotion..."
-  run_comparisons(["client"])
+  run_comparisons("client")
 end
 
-# "Request" parameter is an array that specifies which tables to retrieve of orders whose vendor has an ongoing promotion.
+# "Request" parameter specifies which table to retrieve records from of orders whose vendor has an ongoing promotion.
 # Currently, the parameter can have value 'order,' 'client,' or 'vendor.' Having this parameter allows demonstration
 # of how '.includes,' '.joins, and enumeration perform under different retrieval scenarios.
 # For example, since the initial query is performed on the Order table, client info retrieval requires accessing a different
@@ -29,62 +29,83 @@ end
 def run_comparisons(request)
   # Use Benchmark to retrieve real time elapsed of record retrieval.
   # Benchmark module reference: http://ruby-doc.org/stdlib-2.0.0/libdoc/benchmark/rdoc/Benchmark.html
-  joins_results = Set.new
-  includes_results = Set.new
-  enumeration_results = Set.new
+
+  joins_results = Set.new # Unique records from using the .joins method
+  includes_results = Set.new # Unique records from using the .includes method
+  enumeration_results = Set.new # Unique records from using the enumeration method
 
   joins_runtime = Benchmark.realtime do
-    orders = Order.joins(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
-    orders.each do |order|
-      joins_results.add(get_info(order, request))
-    end
+    joins_results = retrieve_with_joins(request, joins_results)
   end
 
   includes_runtime = Benchmark.realtime do
-    orders = Order.includes(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
-    orders.each do |order|
-      includes_results.add(get_info(order, request))
-    end
+    includes_results = retrieve_with_includes(request, includes_results)
   end
 
   enumeration_runtime = Benchmark.realtime do
-    orders = Order.all
-    orders.each do |order|
-      if order.vendor.promotion==true &&  order.client.active==true
-        enumeration_results.add(get_info(order, request))
-      end
-    end
+    enumeration_results = retrieve_with_enumeration(request, enumeration_results)
+    #puts enumeration_results.count
   end
 
   joins_results_count = joins_results.count
   includes_results_count = includes_results.count
   enumeration_results_count = enumeration_results.count
 
-  if joins_results_count == includes_results_count && includes_results_count == enumeration_results_count
-    puts "#{joins_results_count} unique #{request}(s) retrieved."
-  else
-    puts "#{joins_results_count} unique #{request} were retrieved from using .joins, #{includes_results_count} unique #{request} were retrieved from using .includes, and #{enumeration_results_count} unique #{request} were retrieved from using enumeration."
-  end
+  # Print the number of records retrieved and the time elapsed using all three methods.
+  # Verifies that all three methods performed the same record retrievals.
+  puts "#{joins_results_count} unique #{request}(s) were retrieved using .joins, #{includes_results_count} unique #{request} were retrieved using .includes, and #{enumeration_results_count} unique #{request} were retrieved using enumeration."
   puts "That took #{joins_runtime} seconds with .joins, #{includes_runtime} seconds with .includes, and #{enumeration_runtime} seconds with enumeration.\n\n"
 end
 
-# Retrieve and output information on requested tables
-def get_info(order, request)
-  request.each do |table|
-    case table
-    when "order"
-      return order.id
-    when "client"
-      return order.client.id
-    when "vendor"
-      return order.vendor.id
-    else
-      puts "error"# raise error
+# Uses ".joins" to find all orders whose vendor has an ongoing promotion
+# Returns an array of unique records associated to the orders, specified by the "request" parameter
+def retrieve_with_joins(request, results)
+  orders = Order.joins(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
+  orders.each do |order|
+    results.add(get_record(order, request)) # Store unique records in Set
+  end
+  return results
+end
+
+# Uses ".includes" to find all orders whose vendor has an ongoing promotion
+# Returns an array of unique records associated to the orders, specified by the "request" parameter
+def retrieve_with_includes(request, results)
+  orders = Order.includes(:client, :vendor).where(vendors: {promotion: true}, clients: {active: true})
+  orders.each do |order|
+    # Although the records in includes_results will match the ones in joins_results, this ensures consistency in order to compare relative runtimes
+    results.add(get_record(order, request))
+  end
+  return results
+end
+
+# Uses the enumeration method to find all orders whose vendor has an ongoing promotion
+# Returns an array of unique records associated to the orders, specified by the "request" parameter
+def retrieve_with_enumeration(request, results)
+  orders = Order.all
+  orders.each do |order|
+    if order.vendor.promotion==true &&  order.client.active==true
+      # Although the records in enumeration_results will match the ones in joins_results and includes_results, this ensures consistency in order to compare relative runtimes
+      results.add(get_record(order, request))
     end
+  end
+  return results
+end
+
+# Retrieve and return ID of requested table associated with the given order parameter
+def get_record(order, request)
+  case request
+  when "order"
+    return order.id
+  when "client"
+    return order.client.id
+  when "vendor"
+    return order.vendor.id
+  else
+    raise ArgumentError, "'request' parameter must be 'order,' 'client,' or 'vendor'" # Acceptable inputs can easily be added in the future
   end
 end
 
-# Parameter specifies number of orders to insert into database
+# Insert into the database number of orders specified by the "order_count" parameter
 def create_orders(order_count)
   Order.delete_all
 
