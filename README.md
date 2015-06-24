@@ -51,4 +51,6 @@ The rake task "compare_runtimes.rake" takes care of creating the database, loadi
 ## TODO
 Given the time constraint, I did not include a test suite for this application. 
 
+The models can also be expanded on to be more robust and reflective of a realistic scenario. I initially considered also including Designer and Promotion tables, but they do not contribute immensely to the purpose of this application.
+
 Thanks for reading!
