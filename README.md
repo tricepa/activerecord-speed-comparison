@@ -17,6 +17,10 @@ In designing the models, I used the RoR guide for associations as a resource: ht
 
 I compare the relative runtimes of ".includes," ".joins," and simple enumeration by using the three methods on the Order table to separately retrieve all the orders that are from a vendor with an ongoing promotion. I used the Benchmark module (http://ruby-doc.org/stdlib-2.1.1/libdoc/benchmark/rdoc/Benchmark.html) to measure the runtimes of the record retrieval code blocks. Although the module has functionality to output the user, system, total, and real times of operation, since we are concerned with relative runtimes I limited the output to the real time elapsed.
 
+To satisfy the requirement of having the entire application executable from a single rake tas, I found the following article to be a helpful starting point: https://richonrails.com/articles/building-a-simple-rake-task. As I implemented and tested my application, I built on and veered from that simple model. For example, I decided to seed the database with Client and Vendor data from "seeds.rb" because the data is pretty static and this allows the seeding to be done independently of the rake task. I chose to seed the Order records in the rake task to allow for more dynamic seeding.
+
+## Results
+
 With a small dataset (5 orders), the results vary and there are instances where enumeration actually performs the fastest.
 
 With a larger dataset (500 orders), however, there are more consistent results. When retrieving just the orders whose vendor has an ongoing promotion, ".joins" was relatively faster than ".includes." This makes sense because ".joins" is preferable when used for filtering, whereas ".includes" expends additional time to eager-load associations.
