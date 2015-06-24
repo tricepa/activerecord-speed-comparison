@@ -30,6 +30,29 @@ With a larger dataset (500 orders), however, there are more consistent results. 
 
 When retrieving the clients of those orders, however, ".includes" wins out by far. This makes sense, as ".includes" uses eager-loading and does not require separate SQL queries to retrieve the client association of the orders. In both cases, it is clear that enumeration consistently takes the longest to run. 
 
+Sample output:
+
+The database now has 5 orders.
+
+Retrieving orders whose vendor has an ongoing promotion...
+1 unique order(s) were retrieved using .joins, 1 unique order were retrieved using .includes, and 1 unique order were retrieved using enumeration.
+That took 0.005389 seconds with .joins, 0.003657 seconds with .includes, and 0.005135 seconds with enumeration.
+
+Retrieving clients of orders whose vendor has an ongoing promotion...
+1 unique client(s) were retrieved using .joins, 1 unique client were retrieved using .includes, and 1 unique client were retrieved using enumeration.
+That took 0.002007 seconds with .joins, 0.001965 seconds with .includes, and 0.004062 seconds with enumeration.
+
+The database now has 500 orders.
+
+Retrieving orders whose vendor has an ongoing promotion...
+138 unique order(s) were retrieved using .joins, 138 unique order were retrieved using .includes, and 138 unique order were retrieved using enumeration.
+That took 0.003572 seconds with .joins, 0.012452 seconds with .includes, and 0.33843 seconds with enumeration.
+
+Retrieving clients of orders whose vendor has an ongoing promotion...
+48 unique client(s) were retrieved using .joins, 48 unique client were retrieved using .includes, and 48 unique client were retrieved using enumeration.
+That took 0.061279 seconds with .joins, 0.013217 seconds with .includes, and 0.364144 seconds with enumeration.
+
+
 ## Usage & Data
 
 Clone repo:
