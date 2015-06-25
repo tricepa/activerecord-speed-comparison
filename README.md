@@ -10,19 +10,30 @@ Ruby version used for development: 2.1.1
 Rails version used for development: 4.2.2
 
 Install Ruby using RVM:
+
 $ \curl -L https://get.rvm.io | bash -s stable --ruby
+
 $ rvm install ruby
+
 $ rvm --default use ruby-2.1.1
 
+
 Update Ruby gem manager:
+
 $ gem update --system
 
+
 Install Bundler and Rails:
+
 $ gem install bundler
+
 $ gem install rails
 
+
 Install latest version of PostgreSQL:
+
 $ brew install postgresql
+
 
 ## Design and Implementation Process
 Given the prompt, I learned about the differences among the three methods of querying using the RoR guide as a resource: http://guides.rubyonrails.org/active_record_querying.html. I identified two main factors that would demonstrate performance differences among the three methods - size of dataset and whether the record to retrieve is in the table that the .joins/.includes/enumeration operation was performed on.
