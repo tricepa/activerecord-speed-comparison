@@ -35,6 +35,25 @@ Install latest version of PostgreSQL:
 $ brew install postgresql
 
 
+## Usage & Data
+
+Clone repo:
+
+git clone https://github.com/tricepa/activerecord-speed-comparison.git
+
+cd activerecord-speed-comparison
+
+Install gem dependencies:
+
+bundle install
+
+Run rake task:
+
+rake compare_runtimes
+
+The rake task "compare_runtimes.rake" takes care of creating the database, loading the appropriate tables from "schema.rb," and seeding the database with the Client and Vendor data in "seeds.rb." Orders are inserted dynamically in the rake task itself to demonstrate comparisons with differently sized datasets.
+
+
 ## Design and Implementation Process
 Given the prompt, I learned about the differences among the three methods of querying using the RoR guide as a resource: http://guides.rubyonrails.org/active_record_querying.html. I identified two main factors that would demonstrate performance differences among the three methods - size of dataset and whether the record to retrieve is in the table that the .joins/.includes/enumeration operation was performed on.
 
@@ -89,24 +108,6 @@ Retrieving clients of orders whose vendor has an ongoing promotion...
 
 That took 0.061279 seconds with .joins, 0.013217 seconds with .includes, and 0.364144 seconds with enumeration.
 
-
-## Usage & Data
-
-Clone repo:
-
-git clone https://github.com/tricepa/activerecord-speed-comparison.git
-
-cd activerecord-speed-comparison
-
-Install gem dependencies:
-
-bundle install
-
-Run rake task:
-
-rake compare_runtimes
-
-The rake task "compare_runtimes.rake" takes care of creating the database, loading the appropriate tables from "schema.rb," and seeding the database with the Client and Vendor data in "seeds.rb." Orders are inserted dynamically in the rake task itself to demonstrate comparisons with differently sized datasets.
 
 ## TODO
 Given the time constraint, I did not include a test suite for this application. 
