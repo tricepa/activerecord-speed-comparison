@@ -1,6 +1,6 @@
 # Active Record Speed Comparison
 
-This application compares the relative runtime speeds of using ".includes," ".joins," and simple enumeration to retrieve Active Record records through a single rake task "compare_runtimes.rake."
+This Ruby on Rails application compares the relative runtime speeds of retrieving Active Record records using ".includes," ".joins," and simple enumeration through a single rake task "compare_runtimes.rake."
 
 ## Development Environment & Installations
 This application requires Ruby, Rails, and PostgreSQL installations. 
