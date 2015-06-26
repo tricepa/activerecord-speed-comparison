@@ -118,6 +118,6 @@ def create_orders(order_count)
     client.orders.create!(id: "#{n+1}", summary: "#{vendor.name} order by #{client.name}", vendor: vendor)
   end
 
-  puts "The database now has #{order_count} orders.\n\n"
+  puts "There are now #{order_count} order(s) in the database.\n\n"
 end
 

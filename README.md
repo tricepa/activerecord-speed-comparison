@@ -68,36 +68,40 @@ When retrieving the clients of those orders, however, ".includes" wins out by fa
 
 ### Sample output:
 
-The database now has 5 orders.
+There are now 100 client(s) in the database, 46 of which are active.
+There are now 10 vendors in the database, 4 of which have an ongoing promotion.
+
+There are now 5 order(s) in the database.
 
 Retrieving orders whose vendor has an ongoing promotion...
-
-1 unique order(s) were retrieved using .joins, 1 unique order were retrieved using .includes, and 1 unique order were retrieved using enumeration.
-
-That took 0.005389 seconds with .joins, 0.003657 seconds with .includes, and 0.005135 seconds with enumeration.
-
+                    user     system      total        real
+.joins:         0.010000   0.000000   0.010000 (  0.008326)
+.includes:      0.000000   0.000000   0.000000 (  0.005155)
+enumeration:    0.010000   0.000000   0.010000 (  0.007243)
+2 unique order(s) were retrieved using .joins, 2 unique order were retrieved using .includes, and 2 unique order were retrieved using enumeration.
 
 Retrieving clients of orders whose vendor has an ongoing promotion...
+                    user     system      total        real
+.joins:         0.000000   0.000000   0.000000 (  0.003369)
+.includes:      0.000000   0.000000   0.000000 (  0.003689)
+enumeration:    0.010000   0.000000   0.010000 (  0.007598)
+2 unique client(s) were retrieved using .joins, 2 unique client were retrieved using .includes, and 2 unique client were retrieved using enumeration.
 
-1 unique client(s) were retrieved using .joins, 1 unique client were retrieved using .includes, and 1 unique client were retrieved using enumeration.
-
-That took 0.002007 seconds with .joins, 0.001965 seconds with .includes, and 0.004062 seconds with enumeration.
-
-
-The database now has 500 orders.
+There are now 500 order(s) in the database.
 
 Retrieving orders whose vendor has an ongoing promotion...
-
-138 unique order(s) were retrieved using .joins, 138 unique order were retrieved using .includes, and 138 unique order were retrieved using enumeration.
-
-That took 0.003572 seconds with .joins, 0.012452 seconds with .includes, and 0.33843 seconds with enumeration.
-
+                    user     system      total        real
+.joins:         0.010000   0.000000   0.010000 (  0.004435)
+.includes:      0.010000   0.000000   0.010000 (  0.014550)
+enumeration:    0.360000   0.020000   0.380000 (  0.457150)
+82 unique order(s) were retrieved using .joins, 82 unique order were retrieved using .includes, and 82 unique order were retrieved using enumeration.
 
 Retrieving clients of orders whose vendor has an ongoing promotion...
-
-48 unique client(s) were retrieved using .joins, 48 unique client were retrieved using .includes, and 48 unique client were retrieved using enumeration.
-
-That took 0.061279 seconds with .joins, 0.013217 seconds with .includes, and 0.364144 seconds with enumeration.
+                    user     system      total        real
+.joins:         0.040000   0.010000   0.050000 (  0.057074)
+.includes:      0.020000   0.000000   0.020000 (  0.015799)
+enumeration:    0.390000   0.020000   0.410000 (  0.484358)
+38 unique client(s) were retrieved using .joins, 38 unique client were retrieved using .includes, and 38 unique client were retrieved using enumeration.
 
 
 ## TODO
