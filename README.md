@@ -9,50 +9,43 @@ Ruby version used for development: 2.1.1
 
 Rails version used for development: 4.2.2
 
+Mac OS X:
 Install Ruby using RVM:
 
-$ \curl -L https://get.rvm.io | bash -s stable --ruby
-
-$ rvm install ruby
-
-$ rvm --default use ruby-2.1.1
-
+	$ \curl -L https://get.rvm.io | bash -s stable --ruby
+	$ rvm install ruby
+	$ rvm --default use ruby-2.1.1
 
 Update Ruby gem manager:
 
-$ gem update --system
-
+	$ gem update --system
 
 Install Bundler and Rails:
 
-$ gem install bundler
+	$ gem install bundler
+	$ gem install rails
 
-$ gem install rails
+Install and run latest version of PostgreSQL:
 
-
-Install latest version of PostgreSQL:
-
-$ brew install postgresql
-
+	$ brew install postgresql
+	$ postgres -D /usr/local/var/postgres
 
 ## Usage & Data
 
 Clone repo:
 
-git clone https://github.com/tricepa/activerecord-speed-comparison.git
-
-cd activerecord-speed-comparison
+	git clone https://github.com/tricepa/activerecord-speed-comparison.git
+	cd activerecord-speed-comparison
 
 Install gem dependencies:
 
-bundle install
+	bundle install
 
 Run rake task:
 
-rake compare_runtimes
+	rake compare_runtimes
 
 The rake task "compare_runtimes.rake" takes care of creating the database, loading the appropriate tables from "schema.rb," and seeding the database with the Client and Vendor data in "seeds.rb." Orders are inserted dynamically in the rake task itself to demonstrate comparisons with differently sized datasets.
-
 
 ## Design and Implementation Process
 Given the prompt, I learned about the differences among the three methods of querying using the RoR guide as a resource: http://guides.rubyonrails.org/active_record_querying.html. I identified two main factors that would demonstrate performance differences among the three methods - size of dataset and whether the record to retrieve is in the table that the .joins/.includes/enumeration operation was performed on.
