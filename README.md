@@ -74,33 +74,37 @@ There are now 10 vendors in the database, 4 of which have an ongoing promotion.
 There are now 5 order(s) in the database.
 
 Retrieving orders whose vendor has an ongoing promotion...
-                    user     system      total        real
-.joins:         0.010000   0.000000   0.010000 (  0.008326)
-.includes:      0.000000   0.000000   0.000000 (  0.005155)
-enumeration:    0.010000   0.000000   0.010000 (  0.007243)
+               |   user   |  system   |    total   |   real
+               |----------|-----------|------------|------------
+.joins:        | 0.010000 |  0.000000 |  0.010000  |(  0.008326)
+.includes:     | 0.000000 |  0.000000 |  0.000000  |(  0.005155)
+enumeration:   | 0.010000 |  0.000000 |  0.010000  |(  0.007243)
 2 unique order(s) were retrieved using .joins, 2 unique order were retrieved using .includes, and 2 unique order were retrieved using enumeration.
 
 Retrieving clients of orders whose vendor has an ongoing promotion...
-                    user     system      total        real
-.joins:         0.000000   0.000000   0.000000 (  0.003369)
-.includes:      0.000000   0.000000   0.000000 (  0.003689)
-enumeration:    0.010000   0.000000   0.010000 (  0.007598)
+               |    user  |   system  |    total   |     real
+               |----------|-----------|------------|------------
+.joins:        | 0.000000 |  0.000000 |  0.000000  |(  0.003369)
+.includes:     | 0.000000 |  0.000000 |  0.000000  |(  0.003689)
+enumeration:   | 0.010000 |  0.000000 |  0.010000  |(  0.007598)
 2 unique client(s) were retrieved using .joins, 2 unique client were retrieved using .includes, and 2 unique client were retrieved using enumeration.
 
 There are now 500 order(s) in the database.
 
 Retrieving orders whose vendor has an ongoing promotion...
-                    user     system      total        real
-.joins:         0.010000   0.000000   0.010000 (  0.004435)
-.includes:      0.010000   0.000000   0.010000 (  0.014550)
-enumeration:    0.360000   0.020000   0.380000 (  0.457150)
+               |     user |    system |     total  |      real
+               |----------|-----------|------------|------------
+.joins:        | 0.010000 |  0.000000 |  0.010000  |(  0.004435)
+.includes:     | 0.010000 |  0.000000 |  0.010000  |(  0.014550)
+enumeration:   | 0.360000 |  0.020000 |  0.380000  |(  0.457150)
 82 unique order(s) were retrieved using .joins, 82 unique order were retrieved using .includes, and 82 unique order were retrieved using enumeration.
 
 Retrieving clients of orders whose vendor has an ongoing promotion...
-                    user     system      total        real
-.joins:         0.040000   0.010000   0.050000 (  0.057074)
-.includes:      0.020000   0.000000   0.020000 (  0.015799)
-enumeration:    0.390000   0.020000   0.410000 (  0.484358)
+               |     user |    system |     total  |      real
+               |----------|-----------|------------|------------
+.joins:        | 0.040000 |  0.010000 |  0.050000  |(  0.057074)
+.includes:     | 0.020000 |  0.000000 |  0.020000  |(  0.015799)
+enumeration:   | 0.390000 |  0.020000 |  0.410000  |(  0.484358)
 38 unique client(s) were retrieved using .joins, 38 unique client were retrieved using .includes, and 38 unique client were retrieved using enumeration.
 
 
