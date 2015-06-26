@@ -3,13 +3,11 @@
 This Ruby on Rails application compares the relative runtime speeds of retrieving Active Record records using ".includes," ".joins," and simple enumeration through a single rake task "compare_runtimes.rake."
 
 ## Development Environment & Installations
-This application requires Ruby, Rails, and PostgreSQL installations. 
+This application requires Ruby (developed with 2.1.1), Rails (developed with 4.2.2), and PostgreSQL installations. Ruby version used for development: 2.1.1
 
-Ruby version used for development: 2.1.1
+Mac OS X
 
-Rails version used for development: 4.2.2
 
-Mac OS X:
 Install Ruby using RVM:
 
 	$ \curl -L https://get.rvm.io | bash -s stable --ruby
@@ -56,7 +54,7 @@ In designing the models, I used the RoR guide for associations as a resource: ht
 
 I compare the relative runtimes of ".includes," ".joins," and simple enumeration by using the three methods on the Order table to separately retrieve all the orders that are from a vendor with an ongoing promotion. 
 
-I used the Benchmark module (http://ruby-doc.org/stdlib-2.1.1/libdoc/benchmark/rdoc/Benchmark.html) to measure the runtimes of the record retrieval code blocks. Although the module has functionality to output the user, system, total, and real times of operation, since we are concerned with relative runtimes I limited the output to the real time elapsed.
+I used the Benchmark module (http://ruby-doc.org/stdlib-2.1.1/libdoc/benchmark/rdoc/Benchmark.html) to measure the (user, system, total, and real) runtimes of the record retrieval code blocks and output the results in a comparison table.
 
 To satisfy the requirement of having the entire application executable from a single rake task, I found the following article to be a helpful starting point: https://richonrails.com/articles/building-a-simple-rake-task. As I implemented and tested my application, I built on and veered from that simple model. For example, I decided to seed the database with Client and Vendor data from "seeds.rb" because the data is pretty static and this allows the seeding to be done independently of the rake task. I chose to seed the Order records in the rake task to allow for more dynamic seeding.
 
@@ -68,7 +66,7 @@ With a larger dataset (500 orders), however, there are more consistent results. 
 
 When retrieving the clients of those orders, however, ".includes" wins out by far. This makes sense, as ".includes" uses eager-loading and does not require separate SQL queries to retrieve the client association of the orders. In both cases, it is clear that enumeration consistently takes the longest to run. 
 
-Sample output:
+### Sample output:
 
 The database now has 5 orders.
 

@@ -31,28 +31,26 @@ def run_comparisons(request)
   includes_results = Set.new # Unique records from using the .includes method
   enumeration_results = Set.new # Unique records from using the enumeration method
 
-  # Use Benchmark to retrieve real time elapsed of record retrieval.
+  # Use Benchmark to print a comparison table of record retrieval runtimes using the three methods
   # Benchmark module reference: http://ruby-doc.org/stdlib-2.0.0/libdoc/benchmark/rdoc/Benchmark.html
-  joins_runtime = Benchmark.realtime do
-    joins_results = retrieve_with_joins(request, joins_results)
-  end
-
-  includes_runtime = Benchmark.realtime do
-    includes_results = retrieve_with_includes(request, includes_results)
-  end
-
-  enumeration_runtime = Benchmark.realtime do
-    enumeration_results = retrieve_with_enumeration(request, enumeration_results)
+  Benchmark.bm(13) do |bm|
+    bm.report(".joins:") do
+      joins_results = retrieve_with_joins(request, joins_results)
+    end
+    bm.report(".includes:") do
+      includes_results = retrieve_with_includes(request, includes_results)
+    end
+    bm.report("enumeration:") do
+      enumeration_results = retrieve_with_enumeration(request, enumeration_results)
+    end
   end
 
   joins_results_count = joins_results.count
   includes_results_count = includes_results.count
   enumeration_results_count = enumeration_results.count
 
-  # Print the number of records retrieved and the time elapsed using all three methods.
-  # Confirm that all three methods performed the same record retrievals.
-  puts "#{joins_results_count} unique #{request}(s) were retrieved using .joins, #{includes_results_count} unique #{request} were retrieved using .includes, and #{enumeration_results_count} unique #{request} were retrieved using enumeration."
-  puts "That took #{joins_runtime} seconds with .joins, #{includes_runtime} seconds with .includes, and #{enumeration_runtime} seconds with enumeration.\n\n"
+  # Print the number of records retrieved; confirm that all three methods performed the same record retrievals
+  puts "#{joins_results_count} unique #{request}(s) were retrieved using .joins, #{includes_results_count} unique #{request} were retrieved using .includes, and #{enumeration_results_count} unique #{request} were retrieved using enumeration.\n\n"
 end
 
 # Use ".joins" to find all orders whose vendor has an ongoing promotion
