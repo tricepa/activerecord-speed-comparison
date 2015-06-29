@@ -106,7 +106,7 @@ def create_orders(order_count)
   order_count.times do |n|
     client = Client.find(prng.rand(1..client_count))
     vendor = Vendor.find(prng.rand(1..vendor_count))
-    client.orders.create!(id: "#{n+1}", summary: "#{vendor.name} order by #{client.name}", vendor: vendor)
+    client.orders.create!(id: "#{n+1}", summary: "$#{prng.rand(0.01..3000.00).round(2)} order by #{client.name} from #{vendor.name}", vendor: vendor)
   end
   puts "There are now #{order_count} orders in the database.\n\n"
 end

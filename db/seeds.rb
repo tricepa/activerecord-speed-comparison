@@ -20,7 +20,7 @@ Vendor.create!([
   {id: 7, name: "CB2", promotion: [true, false].sample},
   {id: 8, name: "Restoration Hardware", promotion: [true, false].sample},
   {id: 9, name: "Dwell Studio", promotion: [true, false].sample},
-  {id: 10, name: "Some thrift shop in Williamsburg", promotion: [true, false].sample}
+  {id: 10, name: "Some Thrift Shop in Williamsburg", promotion: [true, false].sample}
 ])
 vendors_with_promo_count = Vendor.where(promotion: true).count
 puts "There are now 10 vendors in the database, #{vendors_with_promo_count} of which have an ongoing promotion.\n\n"

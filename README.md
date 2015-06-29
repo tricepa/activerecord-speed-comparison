@@ -115,7 +115,7 @@ enumeration | 0.390000| 0.020000  | 0.410000 |(  0.484358)
 
 
 ## TODO
-Given the time constraint, I did not include a test suite for this application. 
+Given the time constraint, I did not include a full test suite for this application, but included basic tests for the Client, Vendor, and Order models.
 
 The models can also be expanded on to be more robust and reflective of a realistic scenario. I initially considered also including Designer and Promotion tables, but they do not contribute immensely to the purpose of this application.
 

@@ -4,4 +4,5 @@ class Order < ActiveRecord::Base
   belongs_to :vendor
   validates :client_id, presence: true
   validates :vendor_id, presence: true
+  validates :summary, presence: true, length: {maximum: 140}
 end
