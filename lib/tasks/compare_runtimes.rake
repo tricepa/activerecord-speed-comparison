@@ -50,7 +50,7 @@ def run_comparisons(request)
   enumeration_results_count = enumeration_results.count
 
   # Print the number of records retrieved; confirm that all three methods performed the same record retrievals
-  puts "#{joins_results_count} unique #{request}(s) were retrieved using .joins, #{includes_results_count} unique #{request} were retrieved using .includes, and #{enumeration_results_count} unique #{request} were retrieved using enumeration.\n\n"
+  puts "#{joins_results_count} unique #{request}s were retrieved using .joins, #{includes_results_count} unique #{request}s were retrieved using .includes, and #{enumeration_results_count} unique #{request}s were retrieved using enumeration.\n\n"
 end
 
 # Use ".joins" to find all orders whose vendor has an ongoing promotion
@@ -118,6 +118,6 @@ def create_orders(order_count)
     client.orders.create!(id: "#{n+1}", summary: "#{vendor.name} order by #{client.name}", vendor: vendor)
   end
 
-  puts "There are now #{order_count} order(s) in the database.\n\n"
+  puts "There are now #{order_count} orders in the database.\n\n"
 end
 

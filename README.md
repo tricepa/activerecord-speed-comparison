@@ -56,6 +56,8 @@ I compare the relative runtimes of ".includes," ".joins," and simple enumeration
 
 I used the Benchmark module (http://ruby-doc.org/stdlib-2.1.1/libdoc/benchmark/rdoc/Benchmark.html) to measure the (user, system, total, and real) runtimes of the record retrieval code blocks and output the results in a comparison table.
 
+Since the prompt specified a console-only deliverable, I used rails-api (reference: https://github.com/rails-api/rails-api) to create the application, leaving out unnecessary functionality such as the Rails middleware stack and template generation. This allows the application to be faster and more lightweight.
+
 To satisfy the requirement of having the entire application executable from a single rake task, I found the following article to be a helpful starting point: https://richonrails.com/articles/building-a-simple-rake-task. As I implemented and tested my application, I built on and veered from that simple model. For example, I decided to seed the database with Client and Vendor data from "seeds.rb" because the data is pretty static and this allows the seeding to be done independently of the rake task. I chose to seed the Order records in the rake task to allow for more dynamic seeding.
 
 ## Results
@@ -68,10 +70,10 @@ When retrieving the clients of those orders, however, ".includes" wins out by fa
 
 ### Sample output:
 
-There are now 100 client(s) in the database, 46 of which are active.
+There are now 100 clients in the database, 46 of which are active.
 There are now 10 vendors in the database, 4 of which have an ongoing promotion.
 
-There are now 5 order(s) in the database.
+There are now 5 orders in the database.
 
 Retrieving orders whose vendor has an ongoing promotion...
 
@@ -80,7 +82,7 @@ Retrieving orders whose vendor has an ongoing promotion...
 .joins    | 0.010000   | 0.000000  | 0.010000 |(  0.008326)
 .includes | 0.000000   | 0.000000  | 0.000000 |(  0.005155)
 enumeration | 0.010000| 0.000000  | 0.010000 |(  0.007243)
-2 unique order(s) were retrieved using .joins, 2 unique order were retrieved using .includes, and 2 unique order were retrieved using enumeration.
+2 unique orders were retrieved using .joins, 2 unique orders were retrieved using .includes, and 2 unique orders were retrieved using enumeration.
 
 Retrieving clients of orders whose vendor has an ongoing promotion...
 
@@ -89,9 +91,9 @@ Retrieving clients of orders whose vendor has an ongoing promotion...
 .joins    | 0.000000   | 0.000000  | 0.000000 |(  0.003369)
 .includes | 0.000000   | 0.000000  | 0.000000 |(  0.003689)
 enumeration | 0.010000| 0.000000  | 0.010000 |(  0.007598)
-2 unique client(s) were retrieved using .joins, 2 unique client were retrieved using .includes, and 2 unique client were retrieved using enumeration.
+2 unique clients were retrieved using .joins, 2 unique clients were retrieved using .includes, and 2 unique clients were retrieved using enumeration.
 
-There are now 500 order(s) in the database.
+There are now 500 orders in the database.
 
 Retrieving orders whose vendor has an ongoing promotion...
 
@@ -100,7 +102,7 @@ Retrieving orders whose vendor has an ongoing promotion...
 .joins    | 0.010000   | 0.000000  | 0.010000 |(  0.004435)
 .includes | 0.010000   | 0.000000  | 0.010000 |(  0.014550)
 enumeration | 0.360000| 0.020000  | 0.380000 |(  0.457150)
-82 unique order(s) were retrieved using .joins, 82 unique order were retrieved using .includes, and 82 unique order were retrieved using enumeration.
+82 unique orders were retrieved using .joins, 82 unique orders were retrieved using .includes, and 82 unique orders were retrieved using enumeration.
 
 Retrieving clients of orders whose vendor has an ongoing promotion...
 
@@ -109,7 +111,7 @@ Retrieving clients of orders whose vendor has an ongoing promotion...
 .joins    | 0.040000   | 0.010000  | 0.050000 |(  0.057074)
 .includes | 0.020000   | 0.000000  | 0.020000 |(  0.015799)
 enumeration | 0.390000| 0.020000  | 0.410000 |(  0.484358)
-38 unique client(s) were retrieved using .joins, 38 unique client were retrieved using .includes, and 38 unique client were retrieved using enumeration.
+38 unique clients were retrieved using .joins, 38 unique clients were retrieved using .includes, and 38 unique clients were retrieved using enumeration.
 
 
 ## TODO

@@ -7,7 +7,7 @@ CLIENT_COUNT.times do |n|
   ])
 end
 active_client_count = Client.where(active: true).count
-puts "There are now #{CLIENT_COUNT} client(s) in the database, #{active_client_count} of which are active."
+puts "There are now #{CLIENT_COUNT} clients in the database, #{active_client_count} of which are active."
 
 # Create ten vendors with random promotion state
 Vendor.create!([
@@ -23,5 +23,5 @@ Vendor.create!([
   {id: 10, name: "Some thrift shop in Williamsburg", promotion: [true, false].sample}
 ])
 vendors_with_promo_count = Vendor.where(promotion: true).count
-puts "There are now 10 vendor(s) in the database, #{vendors_with_promo_count} of which have an ongoing promotion.\n\n"
+puts "There are now 10 vendors in the database, #{vendors_with_promo_count} of which have an ongoing promotion.\n\n"
 
